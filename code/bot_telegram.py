@@ -33,24 +33,25 @@ def init():
 
 # Wakeup notification
 def wakeup_noti():
+	noti_all_members('system restarted')
+
+def noti_all_members(message):
 	global all_users
 	users=[]
 	exception = False
 	for user in all_users:
 		try:
-			bot.sendMessage(user, 'system restarted')
+			bot.sendMessage(user, message)
 			users.append(user)
 		except telepot.exception.BotWasBlockedError:
 			exception = True
 		except:
 			traceback.print_exc()
-			time.sleep(5)
+			time.sleep(2)
 			pass
 	if exception == True :
 		all_users = list(set(users))
 		save_users(datafile,all_users)
-
-
 
 def handler_func(msg):
 	try:
@@ -94,10 +95,8 @@ def cpuinfo(content_type, chat_type, chat_id):
 # bot command start_chat
 def start_chat(content_type, chat_type, chat_id):
 	global all_users
-	print("start_chat")
 	all_users.append(chat_id)
 	all_users = list(set(all_users))
-	print(all_users)
 	save_users(datafile,all_users)
 	return True, "system started"
 
@@ -134,7 +133,7 @@ def thread(logger):
 	print ('Listening ...')
 	while(True):
 		check_system_info(bot)
-		time.sleep(60*60)# 1 hours
+		time.sleep(5)
 
 iThread = None
 
